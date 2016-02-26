@@ -1,0 +1,3 @@
+#!/bin/bash
+STEAM_PATH=/steamcmd
+./7DaysToDieServer.x86 ${SEVEN_DAYS_TO_DIE_SERVER_STARTUP_ARGUMENTS}
