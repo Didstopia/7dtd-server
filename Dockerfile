@@ -49,6 +49,9 @@ ADD serverconfig_original.xml /steamcmd/7dtd/server_data/serverconfig.xml
 # Create an empty log file
 RUN touch /steamcmd/7dtd/server_data/7dtd.log
 
+# Set the server_data up as a volume
+VOLUME ["/steamcmd/7dtd/server_data"]
+
 # Expose necessary ports
 EXPOSE 26900
 EXPOSE 25000
