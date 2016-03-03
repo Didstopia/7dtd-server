@@ -1,5 +1,7 @@
 ## 7 Days to Die server that runs inside a Docker container
 
+Updated to [Alpha 13.8](https://7daystodie.com/alpha-13-8-is-out/)
+
 # How to run the server
 1. Set the ```SEVEN_DAYS_TO_DIE_SERVER_STARTUP_ARGUMENTS``` environment variable to match your preferred server arguments (defaults are set to ```"-configfile=server_data/serverconfig.xml -logfile /dev/stdout -quit -batchmode -nographics -dedicated"```, note how we're logging to stdout)
 2. Optionally mount ```/steamcmd/7dtd/server_data``` somewhere on the host or inside another container to keep your data safe
