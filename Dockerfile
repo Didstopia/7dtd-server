@@ -1,8 +1,5 @@
 FROM ubuntu:14.04
 
-# Add support for 32-bit architecture
-RUN dpkg --add-architecture i386
-
 # Run a quick apt-get update/upgrade
 RUN apt-get update && apt-get upgrade -y && apt-get autoremove -y
 
@@ -11,14 +8,8 @@ RUN apt-get install --no-install-recommends -y \
     ca-certificates \
     software-properties-common \
     python-software-properties \
-    screen \
-    libc6-amd64 \
-    Xvfb \
     lib32gcc1 \
-    net-tools \
-    lib32stdc++6 \
-    lib32z1 \
-    lib32z1-dev \
+    Xvfb \
     curl \
     wget \
     telnet
@@ -26,31 +17,22 @@ RUN apt-get install --no-install-recommends -y \
 # Run as root
 USER root
 
-# Install SteamCMD
-RUN mkdir -p /steamcmd/7dtd && \
-	curl -s http://media.steampowered.com/installer/steamcmd_linux.tar.gz | tar -v -C /steamcmd -zx
+# Setup the default timezone
+ENV TZ=Europe/Helsinki
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-# Create the server directory
-RUN mkdir -p /steamcmd/7dtd/server_data
+# Create and set the steamcmd folder as a volume
+RUN mkdir -p /steamcmd/7dtd
+VOLUME ["/steamcmd"]
 
-# Set the current working directory and the current user
-WORKDIR /steamcmd
-
-# Install/update from install.txt
-ADD install.txt /steamcmd/install.txt
-RUN /steamcmd/steamcmd.sh +runscript /steamcmd/install.txt
+# Add the steamcmd installation script
+ADD install.txt /install.txt
 
 # Copy startup script
-ADD start_7dtd.sh /steamcmd/7dtd/start.sh
+ADD start_7dtd.sh /start.sh
 
 # Copy the default server config in place
-ADD serverconfig_original.xml /steamcmd/7dtd/server_data/serverconfig.xml
-
-# Create an empty log file
-RUN touch /steamcmd/7dtd/server_data/7dtd.log
-
-# Set the server_data up as a volume
-VOLUME ["/steamcmd/7dtd/server_data"]
+ADD serverconfig_original.xml /serverconfig.xml
 
 # Expose necessary ports
 EXPOSE 26900
@@ -65,5 +47,4 @@ EXPOSE 8081
 ENV SEVEN_DAYS_TO_DIE_SERVER_STARTUP_ARGUMENTS "-configfile=server_data/serverconfig.xml -logfile /dev/stdout -quit -batchmode -nographics -dedicated"
 
 # Start the server
-WORKDIR /steamcmd/7dtd
-CMD bash start.sh
+CMD bash /start.sh
