@@ -1,8 +1,7 @@
 ## 7 Days to Die server that runs inside a Docker container
 
-NOTE: This image has been updated so that it installs/updates 7 Days to Die on startup!
+NOTE: This image will always install/update to the latest steamcmd and 7 Days to Die server, all you have to do to update your server is to redeploy the container.
 
-Since this image will always install/update to the latest steamcmd and 7 Days to Die server, all you have to do to update your server is to redeploy the container.
 Also note that the entire /steamcmd can be mounted on the host system.
 
 # How to run the server
