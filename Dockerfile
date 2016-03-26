@@ -23,7 +23,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # Create and set the steamcmd folder as a volume
 RUN mkdir -p /steamcmd/7dtd
-VOLUME ["/steamcmd"]
+VOLUME ["/steamcmd/7dtd"]
 
 # Add the steamcmd installation script
 ADD install.txt /install.txt
