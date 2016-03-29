@@ -47,6 +47,8 @@ EXPOSE 8081
 
 # Setup default environment variables for the server
 ENV SEVEN_DAYS_TO_DIE_SERVER_STARTUP_ARGUMENTS "-configfile=server_data/serverconfig.xml -logfile /dev/stdout -quit -batchmode -nographics -dedicated"
+ENV SEVEN_DAYS_TO_DIE_TELNET_PORT 8081
+ENV SEVEN_DAYS_TO_DIE_TELNET_PASSWORD ""
 
 # Start the server
 ENTRYPOINT ["./start.sh"]
