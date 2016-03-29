@@ -1,7 +1,19 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+pid=0
+
+trap 'exit_handler' SIGHUP SIGINT SIGQUIT SIGTERM
+exit_handler()
+{
+	echo "Shut down signal received"
+	expect /shutdown.sh
+	sleep 6
+	kill $pid
+	exit
+}
 
 # Create the necessary folder structure
-if [ ! -d "/steamcmd/7dtd" ]; then
+if [ ! -d "/steamcmd/7dtd/server_data" ]; then
 	echo "Creating folder structure.."
 	mkdir -p /steamcmd/7dtd/server_data
 	echo "Copying default server configuration.."
@@ -18,7 +30,12 @@ curl -s http://media.steampowered.com/installer/steamcmd_linux.tar.gz | tar -v -
 echo "Installing/updating 7 Days to Die.."
 bash /steamcmd/steamcmd.sh +runscript /install.txt
 
-# Setup paths and run the server
-echo "Starting 7 Days to Die.."
+# Set the working directory
 cd /steamcmd/7dtd
-./7DaysToDieServer.x86_64 ${SEVEN_DAYS_TO_DIE_SERVER_STARTUP_ARGUMENTS}
+
+# Run the server
+echo "Starting 7 Days to Die.."
+/steamcmd/7dtd/7DaysToDieServer.x86_64 ${SEVEN_DAYS_TO_DIE_SERVER_STARTUP_ARGUMENTS} &
+pid="$!"
+
+wait

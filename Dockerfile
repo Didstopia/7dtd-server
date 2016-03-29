@@ -12,7 +12,8 @@ RUN apt-get install --no-install-recommends -y \
     Xvfb \
     curl \
     wget \
-    telnet
+    telnet \
+    expect
 
 # Run as root
 USER root
@@ -28,8 +29,9 @@ VOLUME ["/steamcmd/7dtd"]
 # Add the steamcmd installation script
 ADD install.txt /install.txt
 
-# Copy startup script
+# Copy scripts
 ADD start_7dtd.sh /start.sh
+ADD shutdown.sh /shutdown.sh
 
 # Copy the default server config in place
 ADD serverconfig_original.xml /serverconfig.xml
@@ -47,4 +49,4 @@ EXPOSE 8081
 ENV SEVEN_DAYS_TO_DIE_SERVER_STARTUP_ARGUMENTS "-configfile=server_data/serverconfig.xml -logfile /dev/stdout -quit -batchmode -nographics -dedicated"
 
 # Start the server
-CMD bash /start.sh
+ENTRYPOINT ["./start.sh"]
