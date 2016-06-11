@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM ubuntu:16.04
 
 # Run a quick apt-get update/upgrade
 RUN apt-get update && apt-get upgrade -y && apt-get autoremove -y
@@ -9,7 +9,7 @@ RUN apt-get install --no-install-recommends -y \
     software-properties-common \
     python-software-properties \
     lib32gcc1 \
-    Xvfb \
+    xvfb \
     curl \
     wget \
     telnet \
