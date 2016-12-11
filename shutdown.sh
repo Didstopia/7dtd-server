@@ -9,5 +9,7 @@ spawn telnet $hostname $port
 
 expect "Please enter password:"
 send "$password\r";
+send "saveworld\r";
 send "shutdown\r";
 send "exit\r";
+expect eof
