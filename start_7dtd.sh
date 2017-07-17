@@ -8,9 +8,10 @@ exit_handler()
 	echo "Shut down signal received.."
 	expect /shutdown.sh
 	sleep 6
-	echo "Force quitting.."
+	echo "Forcefully terminating if necessary.."
 	sleep 1
-	kill $child
+	kill $child 2>/dev/null
+	wait $child 2>/dev/null
 	exit
 }
 
@@ -18,15 +19,19 @@ exit_handler()
 if [ ! -d "/steamcmd/7dtd/server_data" ]; then
 	echo "Creating folder structure.."
 	mkdir -p /steamcmd/7dtd/server_data
+fi
+
+# Copy the default config if necessary
+if [ ! -f "/steamcmd/7dtd/server_data/serverconfig.xml" ]; then
 	echo "Copying default server configuration.."
 	cp /serverconfig.xml /steamcmd/7dtd/server_data/serverconfig.xml
+fi
+
+# Create an empty log file if necessary
+if [ ! -f "/steamcmd/7dtd/server_data/7dtd.log" ]; then
 	echo "Creating an empty log file.."
 	touch /steamcmd/7dtd/server_data/7dtd.log
 fi
-
-# Install/update steamcmd
-echo "Installing/updating steamcmd.."
-curl -s http://media.steampowered.com/installer/steamcmd_linux.tar.gz | tar -v -C /steamcmd -zx
 
 # Disable auto-update if start mode is 2
 if [ "$SEVEN_DAYS_TO_DIE_START_MODE" = "2" ]; then
