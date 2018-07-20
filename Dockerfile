@@ -5,7 +5,7 @@ MAINTAINER Didstopia <support@didstopia.com>
 # Fixes apt-get warnings
 ARG DEBIAN_FRONTEND=noninteractive
 
-# Install dependencies, mainly for SteamCMD
+# Install dependencies
 RUN apt-get update && \
 	apt-get install -y --no-install-recommends \
     xvfb \
