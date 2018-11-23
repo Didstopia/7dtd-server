@@ -40,13 +40,12 @@ ADD update_check.sh /update_check.sh
 ADD serverconfig_original.xml /serverconfig.xml
 
 # Expose necessary ports
-EXPOSE 26900
-EXPOSE 25000
-EXPOSE 25001
-EXPOSE 25002
-EXPOSE 25003
-EXPOSE 8080
-EXPOSE 8081
+EXPOSE 26900/tcp
+EXPOSE 26900/udp
+EXPOSE 26901/udp
+EXPOSE 26902/udp
+EXPOSE 8080/tcp
+EXPOSE 8081/tcp
 
 # Setup default environment variables for the server
 ENV SEVEN_DAYS_TO_DIE_SERVER_STARTUP_ARGUMENTS "-configfile=server_data/serverconfig.xml -logfile /dev/stdout -quit -batchmode -nographics -dedicated"
