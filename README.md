@@ -18,4 +18,4 @@ Note that you should also enable telnet and optionally modify the ```SEVEN_DAYS_
 One additional feature you can enable is fully automatic updates, meaning that once a server update hits Steam, it'll restart the server and trigger the automatic update. You can enable this by setting ```SEVEN_DAYS_TO_DIE_UPDATE_CHECKING``` to ```"1"```.
 
 
-If using Docker for Windows make sure to add the Drive letter the git repository is located on, this is doen through the GUI.
+If using Docker for Windows *and* the File System passthrough option, make sure to add the git repo drive letter as a shared drive through the Docker GUI.
