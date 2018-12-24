@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0"?>
 <ServerSettings>
   <property name="ServerPort" 				value="26900"/>				<!-- Port you want the server to listen on. -->
   <property name="ServerVisibility"			value="2"/>					<!-- Visibility of this server: 2 = public, 1 = only shown to friends, 0 = not listed. As you are never friend of a dedicated server setting this to "1" will only work when the first player connects manually by IP. -->
