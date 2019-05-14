@@ -1,15 +1,14 @@
 ## 7 Days to Die server that runs inside a Docker container
 
-*Show your support for this project by signing up for a [free Bitrise account!](https://app.bitrise.io?referrer=02c20c56fa07adcb)*
-
 NOTE: This image will always install/update to the latest steamcmd and 7 Days to Die server, all you have to do to update your server is to redeploy the container.
 
 Also note that the entire /steamcmd/7dtd can be mounted on the host system.
 
 # How to run the server
-1. Set the ```SEVEN_DAYS_TO_DIE_SERVER_STARTUP_ARGUMENTS``` environment variable to match your preferred server arguments (defaults are set to ```"-configfile=server_data/serverconfig.xml -logfile /dev/stdout -quit -batchmode -nographics -dedicated"```, note how we're logging to stdout)
-2. Optionally mount ```/steamcmd/7dtd``` somewhere on the host or inside another container to keep your data safe
-3. Run the container and enjoy!
+1. Optionally set the ```SEVEN_DAYS_TO_DIE_SERVER_STARTUP_ARGUMENTS``` environment variable to match your preferred server arguments (defaults are set to ```"-logfile /dev/stdout -quit -batchmode -nographics -dedicated"```, note how we're logging to stdout)
+2. Optionally set the ```SEVEN_DAYS_TO_DIE_CONFIG_FILE``` environment variable to a different configuration file (default is ```/root/.local/share/7DaysToDie/serverconfig.xml```)
+3. Mount ```/steamcmd/7dtd``` and ```/root/.local/share/7DaysToDie``` somewhere on the host to keep your data safe (first path has the server files, while the second path has the config and save files)
+4. Run the server once to generate the default configuration file, then optionally edit it at ```/root/.local/share/7DaysToDie/serverconfig.xml``` to your liking
 
 You can control the startup mode by using ```SEVEN_DAYS_TO_DIE_START_MODE```. This determines if the server should update and then start (mode 0), only update (mode 1) or only start (mode 2)) The default value is ```"0"```.
 

@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Enable debugging
+#set -x
+
 child=0
 
 trap 'exit_handler' SIGHUP SIGINT SIGQUIT SIGTERM
@@ -15,48 +18,30 @@ exit_handler()
 	exit
 }
 
-# Create the necessary folder structure
-if [ ! -d "/steamcmd/7dtd/server_data" ]; then
-	echo "Creating folder structure.."
-	mkdir -p /steamcmd/7dtd/server_data
-fi
+# Define the install/update function
+install_or_update()
+{
+	# Install 7 Days to Die from install.txt
+	echo "Installing/updating 7 Days to Die.. (this might take a while, be patient)"
+	bash /steamcmd/steamcmd.sh +runscript /install.txt
 
-# Copy the default config if necessary
-if [ ! -f "/steamcmd/7dtd/server_data/serverconfig.xml" ]; then
-	echo "Copying default server configuration.."
-	cp /serverconfig.xml /steamcmd/7dtd/server_data/serverconfig.xml
-fi
-
-# Create an empty log file if necessary
-if [ ! -f "/steamcmd/7dtd/server_data/7dtd.log" ]; then
-	echo "Creating an empty log file.."
-	touch /steamcmd/7dtd/server_data/7dtd.log
-fi
+	# Terminate if exit code wasn't zero
+	if [ $? -ne 0 ]; then
+		echo "Exiting, steamcmd install or update failed!"
+		exit 1
+	fi
+}
 
 # Disable auto-update if start mode is 2
 if [ "$SEVEN_DAYS_TO_DIE_START_MODE" = "2" ]; then
 	# Check that 7 Days to Die exists in the first place
 	if [ ! -f "/steamcmd/7dtd/7DaysToDieServer.x86_64" ]; then
-		# Install 7 Days to Die from install.txt
-		echo "Installing/updating 7 Days to Die.. (this might take a while, be patient)"
-		STEAMCMD_OUTPUT=$(bash /steamcmd/steamcmd.sh +runscript /install.txt | tee /dev/stdout)
-		STEAMCMD_ERROR=$(echo $STEAMCMD_OUTPUT | grep -q 'Error')
-		if [ ! -z "$STEAMCMD_ERROR" ]; then
-			echo "Exiting, steamcmd install or update failed: $STEAMCMD_ERROR"
-			exit
-		fi
+		install_or_update
 	else
 		echo "7 Days to Die seems to be installed, skipping automatic update.."
 	fi
 else
-	# Install/update 7 Days to Die from install.txt
-	echo "Installing/updating 7 Days to Die.. (this might take a while, be patient)"
-	STEAMCMD_OUTPUT=$(bash /steamcmd/steamcmd.sh +runscript /install.txt | tee /dev/stdout)
-	STEAMCMD_ERROR=$(echo $STEAMCMD_OUTPUT | grep -q 'Error')
-	if [ ! -z "$STEAMCMD_ERROR" ]; then
-		echo "Exiting, steamcmd install or update failed: $STEAMCMD_ERROR"
-		exit
-	fi
+	install_or_update
 
 	# Run the update check if it's not been run before
 	if [ ! -f "/steamcmd/7dtd/build.id" ]; then
@@ -83,9 +68,20 @@ node /scheduler_app/app.js &
 # Set the working directory
 cd /steamcmd/7dtd
 
+# Validate that the default server configuration file exists
+if [ ! -f "/steamcmd/7dtd/serverconfig.xml" ]; then
+	echo "ERROR: Default server configuration file not found, are you sure the server is up to date?"
+	exit 1
+fi
+
+# Copy the default config file if one doesn't yet exist
+if [ ! -f "${SEVEN_DAYS_TO_DIE_CONFIG_FILE}" ]; then
+	echo "Config file not found, creating a new one.."
+	cp /steamcmd/7dtd/serverconfig.xml ${SEVEN_DAYS_TO_DIE_CONFIG_FILE}
+fi
+
 # Run the server
-echo "Starting 7 Days to Die.."
-/steamcmd/7dtd/7DaysToDieServer.x86_64 ${SEVEN_DAYS_TO_DIE_SERVER_STARTUP_ARGUMENTS} &
+/steamcmd/7dtd/7DaysToDieServer.x86_64 ${SEVEN_DAYS_TO_DIE_SERVER_STARTUP_ARGUMENTS} -configfile=${SEVEN_DAYS_TO_DIE_CONFIG_FILE} &
 
 child=$!
 wait "$child"
