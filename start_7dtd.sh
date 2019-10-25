@@ -55,6 +55,9 @@ else
 	fi
 fi
 
+# 7 Days to Die includes a 64-bit version of steamclient.so, so we need to tell the OS where it exists
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/steamcmd/7dtd/7DaysToDieServer_Data/Plugins/x86_64
+
 # Start mode 1 means we only want to update
 if [ "$SEVEN_DAYS_TO_DIE_START_MODE" = "1" ]; then
 	echo "Exiting, start mode is 1.."
