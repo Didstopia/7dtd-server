@@ -32,6 +32,20 @@ install_or_update()
 	fi
 }
 
+# Check which branch to use
+if [ ! -z ${SEVEN_DAYS_TO_DIE_BRANCH+x} ]; then
+	echo "Using branch arguments: $SEVEN_DAYS_TO_DIE_BRANCH"
+
+	# Add "-beta" if necessary
+	INSTALL_BRANCH="${SEVEN_DAYS_TO_DIE_BRANCH}"
+	if [ ! "$SEVEN_DAYS_TO_DIE_BRANCH" == "public" ]; then
+		INSTALL_BRANCH="-beta ${SEVEN_DAYS_TO_DIE_BRANCH}"
+	fi
+	sed -i "s/app_update 294420.*validate/app_update 294420 $INSTALL_BRANCH validate/g" /install.txt
+else
+	sed -i "s/app_update 294420.*validate/app_update 294420 validate/g" /install.txt
+fi
+
 # Disable auto-update if start mode is 2
 if [ "$SEVEN_DAYS_TO_DIE_START_MODE" = "2" ]; then
 	# Check that 7 Days to Die exists in the first place

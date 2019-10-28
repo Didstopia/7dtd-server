@@ -16,9 +16,9 @@ if [ -f "/steamcmd/7dtd/build.id" ]; then
 fi
 
 # Minimal validation for the update branch
-STRING_SIZE=${#SEVEN_DAYS_TO_DIE}
+STRING_SIZE=${#SEVEN_DAYS_TO_DIE_BRANCH}
 if [ "$STRING_SIZE" -lt "1" ]; then
-	SEVEN_DAYS_TO_DIE=public
+	SEVEN_DAYS_TO_DIE_BRANCH=public
 fi
 
 # Remove the old cached app info if it exists
@@ -27,7 +27,7 @@ if [ -f "/root/Steam/appcache/appinfo.vdf" ]; then
 fi
 
 # Get the new build id directly from Steam
-NEW_BUILDID="$(./steamcmd/steamcmd.sh +login anonymous +app_info_update 1 +app_info_print "294420" +quit | grep -EA 1000 "^\s+\"branches\"$" | grep -EA 5 "^\s+\"$SEVEN_DAYS_TO_DIE\"$" | grep -m 1 -EB 10 "^\s+}$" | grep -E "^\s+\"buildid\"\s+" | tr '[:blank:]"' ' ' | tr -s ' ' | sed "s/ buildid //g" | xargs)"
+NEW_BUILDID="$(./steamcmd/steamcmd.sh +login anonymous +app_info_update 1 +app_info_print "294420" +quit | grep -EA 1000 "^\s+\"branches\"$" | grep -EA 5 "^\s+\"$SEVEN_DAYS_TO_DIE_BRANCH\"$" | grep -m 1 -EB 10 "^\s+}$" | grep -E "^\s+\"buildid\"\s+" | tr '[:blank:]"' ' ' | tr -s ' ' | sed "s/ buildid //g" | xargs)"
 
 # Check that we actually got a new build id
 STRING_SIZE=${#NEW_BUILDID}
