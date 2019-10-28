@@ -9,7 +9,7 @@ trap 'exit_handler' SIGHUP SIGINT SIGQUIT SIGTERM
 exit_handler()
 {
 	echo "Shut down signal received.."
-	expect /shutdown.sh
+	/shutdown.sh
 	sleep 6
 	echo "Forcefully terminating if necessary.."
 	sleep 1
@@ -23,7 +23,7 @@ install_or_update()
 {
 	# Install 7 Days to Die from install.txt
 	echo "Installing/updating 7 Days to Die.. (this might take a while, be patient)"
-	bash /steamcmd/steamcmd.sh +runscript /install.txt
+	/steamcmd/steamcmd.sh +runscript /install.txt
 
 	# Terminate if exit code wasn't zero
 	if [ $? -ne 0 ]; then
@@ -59,12 +59,12 @@ else
 
 	# Run the update check if it's not been run before
 	if [ ! -f "/steamcmd/7dtd/build.id" ]; then
-		./update_check.sh
+		/update_check.sh
 	else
 		OLD_BUILDID="$(cat /steamcmd/7dtd/build.id)"
 		STRING_SIZE=${#OLD_BUILDID}
 		if [ "$STRING_SIZE" -lt "6" ]; then
-			./update_check.sh
+			/update_check.sh
 		fi
 	fi
 fi
@@ -98,7 +98,7 @@ if [ ! -f "${SEVEN_DAYS_TO_DIE_CONFIG_FILE}" ]; then
 fi
 
 # Run the server
-/steamcmd/7dtd/7DaysToDieServer.x86_64 ${SEVEN_DAYS_TO_DIE_SERVER_STARTUP_ARGUMENTS} -configfile=${SEVEN_DAYS_TO_DIE_CONFIG_FILE} &
+exec /steamcmd/7dtd/7DaysToDieServer.x86_64 ${SEVEN_DAYS_TO_DIE_SERVER_STARTUP_ARGUMENTS} -configfile=${SEVEN_DAYS_TO_DIE_CONFIG_FILE} &
 
 child=$!
 wait "$child"
