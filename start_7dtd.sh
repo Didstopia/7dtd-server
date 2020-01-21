@@ -18,6 +18,12 @@ exit_handler()
 	exit
 }
 
+# 7 Days to Die includes a 64-bit version of steamclient.so, so we need to tell the OS where it exists
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/steamcmd/7dtd/7DaysToDieServer_Data/Plugins/x86_64
+
+# Fix issues with libcurl
+#export LD_PRELOAD=$LD_PRELOAD:/usr/lib/libcurl.so
+
 # Define the install/update function
 install_or_update()
 {
@@ -68,9 +74,6 @@ else
 		fi
 	fi
 fi
-
-# 7 Days to Die includes a 64-bit version of steamclient.so, so we need to tell the OS where it exists
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/steamcmd/7dtd/7DaysToDieServer_Data/Plugins/x86_64
 
 # Start mode 1 means we only want to update
 if [ "$SEVEN_DAYS_TO_DIE_START_MODE" = "1" ]; then

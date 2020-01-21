@@ -1,4 +1,4 @@
-FROM didstopia/base:nodejs-steamcmd-ubuntu-16.04
+FROM didstopia/base:nodejs-12-steamcmd-ubuntu-18.04
 
 LABEL maintainer="Didstopia <support@didstopia.com>"
 
@@ -9,8 +9,6 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
 	apt-get install -y --no-install-recommends \
     xvfb \
-    curl \
-    wget \
     telnet \
     expect && \
     rm -rf /var/lib/apt/lists/*
@@ -35,6 +33,10 @@ ADD install.txt /install.txt
 ADD start_7dtd.sh /start.sh
 ADD shutdown.sh /shutdown.sh
 ADD update_check.sh /update_check.sh
+
+# Run as root by default
+ENV PGID 0
+ENV PUID 0
 
 # Expose necessary ports
 EXPOSE 26900/tcp
