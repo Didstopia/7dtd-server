@@ -1,5 +1,7 @@
 #!/usr/bin/expect -f
 
+## FIXME: Forceful shutdown doesn't work for some reason?
+
 set timeout 5
 set hostname localhost
 set port $::env(SEVEN_DAYS_TO_DIE_TELNET_PORT)

@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
 # Enable debugging
-#set -x
+set -x
+
+## FIXME: Forceful shutdown doesn't work for some reason?
 
 child=0
 

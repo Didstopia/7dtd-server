@@ -13,9 +13,6 @@ RUN apt-get update && \
     expect && \
     rm -rf /var/lib/apt/lists/*
 
-# Run as root
-USER root
-
 # Create and define volumes
 RUN mkdir -p /steamcmd/7dtd /root/.local/share/7DaysToDie
 VOLUME ["/steamcmd/7dtd", "/root/.local/share/7DaysToDie"]
