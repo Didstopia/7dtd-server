@@ -1,6 +1,6 @@
 #!/usr/bin/expect -f
 
-## FIXME: Forceful shutdown doesn't work for some reason?
+## FIXME: This is still broken, as 7DTD is catching the CTRL-C (or some other signal)
 
 set timeout 5
 set hostname localhost
@@ -16,7 +16,8 @@ expect {
 }
 
 send "saveworld\r"
-send "shutdown\r"
-send "exit\r"
+expect "World saved\r"
 
+send "shutdown\r"
+#send "exit\r"
 expect eof

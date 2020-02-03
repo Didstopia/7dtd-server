@@ -1,37 +1,40 @@
 #!/usr/bin/env bash
 
 # Enable debugging
-set -x
+#set -x
 
-## FIXME: Forceful shutdown doesn't work for some reason?
+# Print the user we're currently running as
+echo "Running as user: $(whoami)"
 
 child=0
 
-trap 'exit_handler' SIGHUP SIGINT SIGQUIT SIGTERM
 exit_handler()
 {
-	echo "Shut down signal received.."
-	/shutdown.sh
-	sleep 6
-	echo "Forcefully terminating if necessary.."
-	sleep 1
-	kill $child 2>/dev/null
-	wait $child 2>/dev/null
+	echo "Shutdown signal received.."
+
+	# Execute the telnet shutdown commands
+	/app/shutdown.sh
+	killer=$!
+	wait "$killer"
+
+	sleep 4
+
+	echo "Exiting.."
 	exit
 }
 
+# Trap specific signals and forward to the exit handler
+trap 'exit_handler' SIGINT SIGTERM
+
 # 7 Days to Die includes a 64-bit version of steamclient.so, so we need to tell the OS where it exists
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/steamcmd/7dtd/7DaysToDieServer_Data/Plugins/x86_64
-
-# Fix issues with libcurl
-#export LD_PRELOAD=$LD_PRELOAD:/usr/lib/libcurl.so
 
 # Define the install/update function
 install_or_update()
 {
 	# Install 7 Days to Die from install.txt
 	echo "Installing/updating 7 Days to Die.. (this might take a while, be patient)"
-	/steamcmd/steamcmd.sh +runscript /install.txt
+	/steamcmd/steamcmd.sh +runscript /app/install.txt
 
 	# Terminate if exit code wasn't zero
 	if [ $? -ne 0 ]; then
@@ -49,10 +52,17 @@ if [ ! -z ${SEVEN_DAYS_TO_DIE_BRANCH+x} ]; then
 	if [ ! "$SEVEN_DAYS_TO_DIE_BRANCH" == "public" ]; then
 		INSTALL_BRANCH="-beta ${SEVEN_DAYS_TO_DIE_BRANCH}"
 	fi
-	sed -i "s/app_update 294420.*validate/app_update 294420 $INSTALL_BRANCH validate/g" /install.txt
+	sed -i "s/app_update 294420.*validate/app_update 294420 $INSTALL_BRANCH validate/g" /app/install.txt
 else
-	sed -i "s/app_update 294420.*validate/app_update 294420 validate/g" /install.txt
+	sed -i "s/app_update 294420.*validate/app_update 294420 validate/g" /app/install.txt
 fi
+
+# Fix ownership
+chown -R $(whoami):$(whoami) /steamcmd/7dtd
+
+# Install/update steamcmd
+echo "Installing/updating steamcmd.."
+curl -s http://media.steampowered.com/installer/steamcmd_linux.tar.gz | bsdtar -xvf- -C /steamcmd
 
 # Disable auto-update if start mode is 2
 if [ "$SEVEN_DAYS_TO_DIE_START_MODE" = "2" ]; then
@@ -67,12 +77,12 @@ else
 
 	# Run the update check if it's not been run before
 	if [ ! -f "/steamcmd/7dtd/build.id" ]; then
-		/update_check.sh
+		/app/update_check.sh
 	else
 		OLD_BUILDID="$(cat /steamcmd/7dtd/build.id)"
 		STRING_SIZE=${#OLD_BUILDID}
 		if [ "$STRING_SIZE" -lt "6" ]; then
-			/update_check.sh
+			/app/update_check.sh
 		fi
 	fi
 fi
@@ -85,7 +95,7 @@ fi
 
 # Start cron
 echo "Starting scheduled task manager.."
-node /scheduler_app/app.js &
+node /app/scheduler_app/app.js &
 
 # Set the working directory
 cd /steamcmd/7dtd
@@ -103,7 +113,12 @@ if [ ! -f "${SEVEN_DAYS_TO_DIE_CONFIG_FILE}" ]; then
 fi
 
 # Run the server
-exec /steamcmd/7dtd/7DaysToDieServer.x86_64 ${SEVEN_DAYS_TO_DIE_SERVER_STARTUP_ARGUMENTS} -configfile=${SEVEN_DAYS_TO_DIE_CONFIG_FILE} &
+/steamcmd/7dtd/7DaysToDieServer.x86_64 ${SEVEN_DAYS_TO_DIE_SERVER_STARTUP_ARGUMENTS} -configfile=${SEVEN_DAYS_TO_DIE_CONFIG_FILE} &
 
 child=$!
 wait "$child"
+
+pkill -f nginx
+
+echo "Exiting.."
+exit

@@ -22,8 +22,11 @@ if [ "$STRING_SIZE" -lt "1" ]; then
 fi
 
 # Remove the old cached app info if it exists
-if [ -f "/root/Steam/appcache/appinfo.vdf" ]; then
-	rm -fr /root/Steam/appcache/appinfo.vdf
+# if [ -f "/root/Steam/appcache/appinfo.vdf" ]; then
+# 	rm -fr /root/Steam/appcache/appinfo.vdf
+# fi
+if [ -f "/app/Steam/appcache/appinfo.vdf" ]; then
+	rm -fr /app/Steam/appcache/appinfo.vdf
 fi
 
 # Get the new build id directly from Steam
@@ -57,6 +60,6 @@ if [ "$OLD_BUILDID" = "$NEW_BUILDID" ]; then
 else
 	echo "Latest server build id ($NEW_BUILDID) is newer than the current one ($OLD_BUILDID), waiting for client update.."
 	echo $NEW_BUILDID > /steamcmd/7dtd/build.id
-	/shutdown.sh
+	/app/shutdown.sh
 	exit
 fi

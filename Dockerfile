@@ -13,27 +13,31 @@ RUN apt-get update && \
     expect && \
     rm -rf /var/lib/apt/lists/*
 
-# Create and define volumes
-RUN mkdir -p /steamcmd/7dtd /root/.local/share/7DaysToDie
-VOLUME ["/steamcmd/7dtd", "/root/.local/share/7DaysToDie"]
+# Create the volume directories
+RUN mkdir -p /steamcmd/7dtd /app/.local/share/7DaysToDie
 
 # Setup scheduling support
-ADD scheduler_app/ /scheduler_app/
-WORKDIR /scheduler_app
+ADD scheduler_app/ /app/scheduler_app/
+WORKDIR /app/scheduler_app
 RUN npm install
 WORKDIR /
 
 # Add the steamcmd installation script
-ADD install.txt /install.txt
+ADD install.txt /app/install.txt
 
 # Copy scripts
-ADD start_7dtd.sh /start.sh
-ADD shutdown.sh /shutdown.sh
-ADD update_check.sh /update_check.sh
+ADD start_7dtd.sh /app/start.sh
+ADD shutdown.sh /app/shutdown.sh
+ADD update_check.sh /app/update_check.sh
 
-# Run as root by default
-ENV PGID 0
-ENV PUID 0
+# Fix permissions
+RUN chown -R 1000:1000 \
+    /steamcmd \
+    /app
+
+# Run as a non-root user by default
+ENV PGID 1000
+ENV PUID 1000
 
 # Expose necessary ports
 EXPOSE 26900/tcp
@@ -45,12 +49,15 @@ EXPOSE 8081/tcp
 
 # Setup default environment variables for the server
 ENV SEVEN_DAYS_TO_DIE_SERVER_STARTUP_ARGUMENTS "-logfile /dev/stdout -quit -batchmode -nographics -dedicated"
-ENV SEVEN_DAYS_TO_DIE_CONFIG_FILE "/root/.local/share/7DaysToDie/serverconfig.xml"
+ENV SEVEN_DAYS_TO_DIE_CONFIG_FILE "/app/.local/share/7DaysToDie/serverconfig.xml"
 ENV SEVEN_DAYS_TO_DIE_TELNET_PORT 8081
 ENV SEVEN_DAYS_TO_DIE_TELNET_PASSWORD ""
 ENV SEVEN_DAYS_TO_DIE_BRANCH "public"
 ENV SEVEN_DAYS_TO_DIE_START_MODE "0"
 ENV SEVEN_DAYS_TO_DIE_UPDATE_CHECKING "0"
 
+# Expose the volumes
+VOLUME [ "/steamcmd/7dtd", "/app/.local/share/7DaysToDie" ]
+
 # Start the server
-ENTRYPOINT ["./start.sh"]
+CMD [ "bash", "/app/start.sh" ]
