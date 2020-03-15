@@ -58,7 +58,7 @@ else
 fi
 
 # Fix ownership
-chown -R $(whoami):$(whoami) /steamcmd/7dtd
+chown -R $(PUID):$(PGID) /steamcmd/7dtd ${SEVEN_DAYS_TO_DIE_CONFIG_FILE}
 
 # Install/update steamcmd
 echo "Installing/updating steamcmd.."
