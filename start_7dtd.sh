@@ -57,9 +57,6 @@ else
 	sed -i "s/app_update 294420.*validate/app_update 294420 validate/g" /app/install.txt
 fi
 
-# Fix ownership
-chown -R $(PUID):$(PGID) /steamcmd/7dtd ${SEVEN_DAYS_TO_DIE_CONFIG_FILE}
-
 # Install/update steamcmd
 echo "Installing/updating steamcmd.."
 curl -s http://media.steampowered.com/installer/steamcmd_linux.tar.gz | bsdtar -xvf- -C /steamcmd

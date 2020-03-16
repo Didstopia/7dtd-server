@@ -56,6 +56,9 @@ ENV SEVEN_DAYS_TO_DIE_BRANCH "public"
 ENV SEVEN_DAYS_TO_DIE_START_MODE "0"
 ENV SEVEN_DAYS_TO_DIE_UPDATE_CHECKING "0"
 
+# Define directories to take ownership of
+ENV CHOWN_DIRS "/app,/steamcmd"
+
 # Expose the volumes
 VOLUME [ "/steamcmd/7dtd", "/app/.local/share/7DaysToDie" ]
 
