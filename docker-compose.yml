@@ -16,7 +16,6 @@ services:
       - steamcmd:/steamcmd/7dtd
     restart: unless-stopped
 
-
 volumes:
   app:
     driver: local
