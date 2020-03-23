@@ -1,0 +1,24 @@
+---
+version: "3"
+services:
+  7dtd:
+    image: didstopia/7dtd-server
+    container_name: 7dtd
+    environment:
+      - SEVEN_DAYS_TO_DIE_UPDATE_CHECKING="1"
+    ports:
+      - "26900:26900/tcp"
+      - "26900:26900/udp"
+      - "26901:26901/udp"
+      - "26902:26902/udp"
+    volumes:
+      - app:/app/.local/share/7DaysToDie
+      - steamcmd:/steamcmd/7dtd
+    restart: unless-stopped
+
+
+volumes:
+  app:
+    driver: local
+  steamcmd:
+    driver: local
