@@ -1,4 +1,8 @@
 ## 7 Days to Die server that runs inside a Docker container
+[![Docker Automated build](https://img.shields.io/docker/automated/didstopia/7dtd-server.svg)](https://hub.docker.com/r/didstopia/7dtd-server/)
+[![Docker build status](https://img.shields.io/docker/build/didstopia/7dtd-server.svg)](https://hub.docker.com/r/didstopia/7dtd-server/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/didstopia/7dtd-server.svg)](https://hub.docker.com/r/didstopia/7dtd-server/)
+[![Docker stars](https://img.shields.io/docker/stars/didstopia/7dtd-server.svg)](https://hub.docker.com/r/didstopia/7dtd-server)
 
 This image will always install/update to the latest steamcmd and 7 Days to Die server, all you have to do to update your server is to redeploy the container.
 
