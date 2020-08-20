@@ -48,7 +48,7 @@ EXPOSE 8080/tcp
 EXPOSE 8081/tcp
 
 # Setup default environment variables for the server
-ENV SEVEN_DAYS_TO_DIE_SERVER_STARTUP_ARGUMENTS "-logfile /dev/stdout -quit -batchmode -nographics -dedicated"
+ENV SEVEN_DAYS_TO_DIE_SERVER_STARTUP_ARGUMENTS "-quit -batchmode -nographics -dedicated"
 ENV SEVEN_DAYS_TO_DIE_CONFIG_FILE "/app/.local/share/7DaysToDie/serverconfig.xml"
 ENV SEVEN_DAYS_TO_DIE_TELNET_PORT 8081
 ENV SEVEN_DAYS_TO_DIE_TELNET_PASSWORD ""
