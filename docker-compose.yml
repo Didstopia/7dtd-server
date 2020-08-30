@@ -5,19 +5,20 @@ services:
     image: didstopia/7dtd-server
     container_name: 7dtd
     environment:
-      - SEVEN_DAYS_TO_DIE_UPDATE_CHECKING="1"
+      - SEVEN_DAYS_TO_DIE_UPDATE_CHECKING=1
+      - SEVEN_DAYS_TO_DIE_START_MODE=0
+      - SEVEN_DAYS_TO_DIE_SERVER_PASSWORD=${SEVEN_DAYS_TO_DIE_SERVER_PASSWORD}
+      - SEVEN_DAYS_TO_DIE_TELNET_PASSWORD=${SEVEN_DAYS_TO_DIE_TELNET_PASSWORD}
+      - SEVEN_DAYS_TO_DIE_SERVER_STARTUP_ARGUMENTS=-quit -batchmode -nographics -dedicated
+      - SEVEN_DAYS_TO_DIE_CONFIG_FILE=/app/.local/share/7DaysToDie/serverconfig.xml
     ports:
       - "26900:26900/tcp"
       - "26900:26900/udp"
       - "26901:26901/udp"
       - "26902:26902/udp"
+      - "8080:8080/tcp"
+      - "8081:8081/tcp"
     volumes:
-      - app:/app/.local/share/7DaysToDie
-      - steamcmd:/steamcmd/7dtd
+      - ./7dtd_data/data/:/app/.local/share/7DaysToDie
+      - ./7dtd_data/game/:/steamcmd/7dtd
     restart: unless-stopped
-
-volumes:
-  app:
-    driver: local
-  steamcmd:
-    driver: local

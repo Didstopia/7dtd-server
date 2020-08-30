@@ -4,7 +4,7 @@
 #set -x
 
 # Print the user we're currently running as
-echo "Running as user: $(whoami)"
+echo "Running as user : $(whoami)"
 
 child=0
 

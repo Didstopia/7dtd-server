@@ -26,3 +26,9 @@ If using Docker for Windows *and* the File System passthrough option, make sure 
 ### License
 
 See [LICENSE](LICENSE)
+
+
+### NOTES:
+
+- telnet password seems to fail if other than alphanumeric (a-A, z-Z, 0-9)
+- Run *docker-compose config* to check if you properly set things up in docker-compose file
