@@ -1,0 +1,1 @@
+# This directory is used to house the docker volume for the 7dtd app. It contains the Saves and serverconfig.xml.

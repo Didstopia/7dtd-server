@@ -1,0 +1,1 @@
+# This directory houses the steamcmd app that is run inside the docker in order to download the 7dtd server binaries

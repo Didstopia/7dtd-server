@@ -14,10 +14,18 @@ services:
     volumes:
       - app:/app/.local/share/7DaysToDie
       - steamcmd:/steamcmd/7dtd
-    restart: unless-stopped
+    restart: always
 
 volumes:
   app:
     driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /home/twick00/local/games/7dtd-server/docker_volumes/app
   steamcmd:
     driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /home/twick00/local/games/7dtd-server/docker_volumes/steamcmd

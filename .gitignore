@@ -1,4 +1,8 @@
 7dtd_data/
+docker_volumes/app/*
+docker_volumes/steamcmd/*
+!docker_volumes/app/info.txt
+!docker_volumes/steamcmd/info.txt
 
 # Docker project generated files to ignore
 #  if you want to ignore files created by your editor/tools,
