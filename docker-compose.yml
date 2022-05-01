@@ -1,11 +1,11 @@
 ---
-version: "3"
+version: "4"
 services:
   7dtd:
     image: didstopia/7dtd-server
     container_name: 7dtd
     environment:
-      - SEVEN_DAYS_TO_DIE_UPDATE_CHECKING="1"
+      - SEVEN_DAYS_TO_DIE_UPDATE_CHECKING=1
     ports:
       - "26900:26900/tcp"
       - "26900:26900/udp"
